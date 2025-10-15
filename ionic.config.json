@@ -1,0 +1,7 @@
+{
+  "name": "front_recompesas",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
