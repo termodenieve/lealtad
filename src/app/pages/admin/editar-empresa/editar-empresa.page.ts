@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import axios from 'axios';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-editar-empresa',
@@ -9,6 +10,7 @@ import { Router } from '@angular/router';
   standalone: false,
 })
 export class EditarEmpresaPage implements OnInit {
+  url = environment.url;
   documentId = '';
   nombre = '';
   direccion = '';
@@ -36,7 +38,7 @@ export class EditarEmpresaPage implements OnInit {
   }
 
   try {
-    const res = await axios.get(`http://localhost:1339/api/empresas/${this.documentId}`, {
+    const res = await axios.get(this.url + `/empresas/${this.documentId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -91,7 +93,7 @@ export class EditarEmpresaPage implements OnInit {
 
   try {
     await axios.put(
-      `http://localhost:1339/api/empresas/${this.documentId}`,
+      this.url + `/empresas/${this.documentId}`,
       { data },
       { headers: { Authorization: `Bearer ${token}` } }
     );

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import axios from 'axios';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-forgotpassword',
@@ -8,7 +9,7 @@ import axios from 'axios';
   standalone: false,
 })
 export class ForgotpasswordPage implements OnInit {
-
+  url = environment.url;
   constructor() { }
   email= ''
 
@@ -16,7 +17,7 @@ export class ForgotpasswordPage implements OnInit {
   }
   async recoveryPassword() {
   try {
-    await axios.post('http://localhost:1339/api/auth/forgot-password', {
+    await axios.post(this.url + '/auth/forgot-password', {
       email: this.email,  
     });
 

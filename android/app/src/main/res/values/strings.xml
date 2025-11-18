@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">front_recompesas</string>
+    <string name="title_activity_main">front_recompesas</string>
+    <string name="package_name">lealtad.com</string>
+    <string name="custom_url_scheme">lealtad.com</string>
+</resources>

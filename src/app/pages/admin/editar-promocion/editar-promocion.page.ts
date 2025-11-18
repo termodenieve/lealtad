@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import axios from 'axios';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-editar-promocion',
@@ -9,16 +10,17 @@ import { Router } from '@angular/router';
   standalone: false,
 })
 export class EditarPromocionPage implements OnInit {
-  documentId = ''; 
+  url = environment.url;
+  documentId = '';
   nombre = '';
   visitas = '';
   descripcion = '';
   promocion: any = {};
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   async ngOnInit() {
-    this.documentId = localStorage.getItem('promocionId') || ''; 
+    this.documentId = localStorage.getItem('promocionId') || '';
     if (!this.documentId) {
       alert('No se encontró la promoción a editar');
       this.router.navigateByUrl('/login');
@@ -37,7 +39,7 @@ export class EditarPromocionPage implements OnInit {
 
     try {
       const res = await axios.get(
-       `http://localhost:1339/api/promociones/${this.documentId}?populate[empresa]=*`, 
+        this.url + `/promociones/${this.documentId}?populate[empresa]=*`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -75,43 +77,43 @@ export class EditarPromocionPage implements OnInit {
       return;
     }
     const rol = user.role?.type || user.role?.name || '';
-  console.log("ROL DETECTADO:", rol);
-    
-
-const data: any = {};
-
-if (this.nombre !== this.promocion.nombre)
-  data.nombre = this.nombre;
-
-if (this.descripcion !== this.promocion.descripcion)
-  data.descripcion = this.descripcion;
-
-if (Object.keys(data).length === 0) {
-  alert('No realizaste ningún cambio');
-  return;
-}
-
-await axios.put(
-  `http://localhost:1339/api/promociones/${this.documentId}`,
-  { data },
-  { headers: { Authorization: `Bearer ${token}` } }
-);
+    console.log("ROL DETECTADO:", rol);
 
 
-      alert('Promoción actualizada correctamente');
-     
+    const data: any = {};
+
+    if (this.nombre !== this.promocion.nombre)
+      data.nombre = this.nombre;
+
+    if (this.descripcion !== this.promocion.descripcion)
+      data.descripcion = this.descripcion;
+
+    if (Object.keys(data).length === 0) {
+      alert('No realizaste ningún cambio');
+      return;
+    }
+
+    await axios.put(
+      this.url + `/promociones/${this.documentId}`,
+      { data },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+
+    alert('Promoción actualizada correctamente');
+
     if (rol === 'admin') {
       this.router.navigateByUrl('/dashboard-admin');
-    } 
+    }
     else if (rol === 'empresa') {
       this.router.navigateByUrl('/dashboard-empresa');
-    } 
+    }
     else {
       console.warn("Rol desconocido:", rol);
       this.router.navigateByUrl('/home');
     }
 
-  } catch (error: any) {
+  } catch(error: any) {
     console.error('Error al editar empresa:', error.response?.data || error);
     alert('Error al actualizar la empresa');
   }

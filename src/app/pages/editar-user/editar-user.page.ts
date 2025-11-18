@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import axios from 'axios';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-editar-user',
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
   standalone: false,
 })
 export class EditarUserPage implements OnInit {
-
+  url = environment.url;
   clienteId = '';
   nombre = '';
   telefono = '';
@@ -34,7 +35,7 @@ export class EditarUserPage implements OnInit {
 
     try {
       const res = await axios.get(
-        `http://localhost:1339/api/clientes?filters[user][id][$eq]=${userId}`,
+        this.url + `/clientes?filters[user][id][$eq]=${userId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -84,7 +85,7 @@ export class EditarUserPage implements OnInit {
 
     try {
       await axios.put(
-        `http://localhost:1339/api/clientes/${this.clienteId}`,
+        this.url + `/clientes/${this.clienteId}`,
         { data },
         { headers: { Authorization: `Bearer ${token}` } }
       );

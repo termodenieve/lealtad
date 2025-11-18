@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import axios from 'axios';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-dashboard-cliente',
@@ -14,6 +15,7 @@ export class DashboardClientePage implements OnInit {
   empresas: any[] = [];
   promociones: any[] = [];
   visitas: any[] = [];
+  url = environment.url;
 
   constructor(private router: Router) {}
 
@@ -38,7 +40,7 @@ export class DashboardClientePage implements OnInit {
   async cargarEmpresas() {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:1339/api/empresas', {
+      const res = await axios.get(this.url + '/empresas', {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -59,7 +61,7 @@ export class DashboardClientePage implements OnInit {
     const token = localStorage.getItem('token');
 
     const res = await axios.get(
-      'http://localhost:1339/api/visitas?populate=empresa,cliente',
+      this.url + '/visitas?populate=empresa,cliente',
       {
         headers: { Authorization: `Bearer ${token}` },
       }

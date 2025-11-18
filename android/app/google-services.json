@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "131926060801",
+    "project_id": "recompensas-f4f87",
+    "storage_bucket": "recompensas-f4f87.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131926060801:android:e4636afe60bc8422df3500",
+        "android_client_info": {
+          "package_name": "lealtad.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5-xwpu2JtEtf0Z1Kevg1cWOS0dKtoRWs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

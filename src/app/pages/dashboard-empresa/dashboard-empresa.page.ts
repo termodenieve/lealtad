@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import axios from 'axios';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-dashboard-empresa',
@@ -9,6 +10,7 @@ import { Router } from '@angular/router';
   standalone: false,
 })
 export class DashboardEmpresaPage implements OnInit {
+  url = environment.url;
   usuario: any = null;
   misEmpresas: any[] = [];
   misClientes: any[] = [];
@@ -62,18 +64,18 @@ export class DashboardEmpresaPage implements OnInit {
     const token = localStorage.getItem('token');
 
     try {
-      const res = await axios.get(`http://localhost:1339/api/empresas?populate=*`, {
+      const res = await axios.get(this.url + `/empresas?populate=*`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       this.misEmpresas = res.data?.data?.map((e: any) => ({
-  id: e.id,
-  documentId: e.documentId,  
-  nombre: e.attributes?.nombre ?? e.nombre,
-  direccion: e.attributes?.direccion ?? e.direccion,
-  telefono: e.attributes?.telefono ?? e.telefono,
-  clientes: e.attributes?.clientes || [],
-}));
+        id: e.id,
+        documentId: e.documentId,
+        nombre: e.attributes?.nombre ?? e.nombre,
+        direccion: e.attributes?.direccion ?? e.direccion,
+        telefono: e.attributes?.telefono ?? e.telefono,
+        clientes: e.attributes?.clientes || [],
+      }));
 
 
       console.log('Empresas del usuario logueado:', this.misEmpresas);
@@ -94,7 +96,7 @@ export class DashboardEmpresaPage implements OnInit {
 
     try {
       const res = await axios.get(
-        `http://localhost:1339/api/promociones?populate[empresa]=*`,
+        this.url + `/promociones?populate[empresa]=*`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -107,9 +109,9 @@ export class DashboardEmpresaPage implements OnInit {
           nombre: attrs.nombre,
           descripcion: attrs.descripcion,
           empresa: {
-          nombre: empresaData.nombre || 'Sin empresa',
-          documentId: empresaDoc
-        }
+            nombre: empresaData.nombre || 'Sin empresa',
+            documentId: empresaDoc
+          }
         };
       }) || [];
 
@@ -130,7 +132,7 @@ export class DashboardEmpresaPage implements OnInit {
 
     try {
       const res = await axios.get(
-        `http://localhost:1339/api/visitas?populate[cliente]=*&populate[empresa]=*`,
+        this.url + `/visitas?populate[cliente]=*&populate[empresa]=*`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -139,15 +141,15 @@ export class DashboardEmpresaPage implements OnInit {
         const clienteData = attrs.cliente?.data?.attributes || attrs.cliente || {};
         const empresaData = attrs.empresa?.data?.attributes || attrs.empresa || {};
 
-       return {
-  id: v.id,
-  documentId: v.documentId,   
-  
-  cliente: clienteData.nombre || 'Sin cliente',
-  empresa: empresaData.nombre || 'Sin empresa',
-  fecha: attrs.fecha,
-  monto: attrs.monto,
-};
+        return {
+          id: v.id,
+          documentId: v.documentId,
+
+          cliente: clienteData.nombre || 'Sin cliente',
+          empresa: empresaData.nombre || 'Sin empresa',
+          fecha: attrs.fecha,
+          monto: attrs.monto,
+        };
 
 
       }) || [];
@@ -169,7 +171,7 @@ export class DashboardEmpresaPage implements OnInit {
     try {
 
       const res = await axios.get(
-        `http://localhost:1339/api/empresas`,
+        this.url + `/empresas`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -203,7 +205,7 @@ export class DashboardEmpresaPage implements OnInit {
 
 
 
-//EMPRESA
+  //EMPRESA
   irCrearEmpresa() {
     if (this.role !== 'admin' && this.role !== 'empresa') {
       alert('No tienes permiso para crear empresas');
@@ -213,118 +215,118 @@ export class DashboardEmpresaPage implements OnInit {
   }
 
   editarEmpresa(empresa: any) {
-   localStorage.setItem('empresaId', empresa.documentId);
-  this.router.navigateByUrl('/editar-empresa');
-}
-
-async eliminarEmpresa(documentId: string) {
-  const confirmar = confirm('¿Eliminar esta empresa?');
-  if (!confirmar) return;
-
-  try {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert('Debes iniciar sesión');
-      return;
-    }
-
-    const res = await axios.delete(
-      `http://localhost:1339/api/empresas/${documentId}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-
-    console.log('Empresa eliminada:', res.data);
-    alert('Empresa eliminada');
-    await this.obtenerMisEmpresas(); 
-  } catch (err) {
-    console.error('Error al eliminar empresa:', err);
-    alert('No fue posible eliminar la empresa');
+    localStorage.setItem('empresaId', empresa.documentId);
+    this.router.navigateByUrl('/editar-empresa');
   }
-}
 
-//PROMOCION
- irCrearProm() {
+  async eliminarEmpresa(documentId: string) {
+    const confirmar = confirm('¿Eliminar esta empresa?');
+    if (!confirmar) return;
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Debes iniciar sesión');
+        return;
+      }
+
+      const res = await axios.delete(
+        this.url + `/empresas/${documentId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      console.log('Empresa eliminada:', res.data);
+      alert('Empresa eliminada');
+      await this.obtenerMisEmpresas();
+    } catch (err) {
+      console.error('Error al eliminar empresa:', err);
+      alert('No fue posible eliminar la empresa');
+    }
+  }
+
+  //PROMOCION
+  irCrearProm() {
     if (this.role !== 'admin' && this.role !== 'empresa') {
       alert('No tienes permiso para crear empresas');
       return;
     }
-      this.router.navigateByUrl('/promociones');
+    this.router.navigateByUrl('/promociones');
   }
-editarProm(promocion: any) {
-  localStorage.setItem('promocionId', promocion.documentId);
-  this.router.navigateByUrl('/editar-promocion');
-}
+  editarProm(promocion: any) {
+    localStorage.setItem('promocionId', promocion.documentId);
+    this.router.navigateByUrl('/editar-promocion');
+  }
 
-  
+
   async eliminarProm(documentId: string) {
-  const confirmar = confirm('¿Eliminar esta promocion?');
-  if (!confirmar) return;
+    const confirmar = confirm('¿Eliminar esta promocion?');
+    if (!confirmar) return;
 
-  try {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert('Debes iniciar sesión');
-      return;
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Debes iniciar sesión');
+        return;
+      }
+
+      const res = await axios.delete(
+        this.url + `/promociones/${documentId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      console.log('Promocion eliminada:', res.data);
+      alert('Promocion eliminada');
+      await this.obtenerMisPromociones();
+    } catch (err) {
+      console.error('Error al eliminar promocion:', err);
+      alert('No fue posible eliminar la promocion');
     }
 
-    const res = await axios.delete(
-      `http://localhost:1339/api/promociones/${documentId}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
 
-    console.log('Promocion eliminada:', res.data);
-    alert('Promocion eliminada');
-    await this.obtenerMisPromociones(); 
-  } catch (err) {
-    console.error('Error al eliminar promocion:', err);
-    alert('No fue posible eliminar la promocion');
   }
 
-  
-}
-
-//VISITA
+  //VISITA
   crearVisita() {
-     if (this.role !== 'admin' && this.role !== 'empresa') {
+    if (this.role !== 'admin' && this.role !== 'empresa') {
       alert('No tienes permiso para crear empresas');
       return;
     }
     this.router.navigateByUrl('/visitas');
   }
-  
-async eliminarVisita(documentId: string) {
-  const confirmar = confirm('¿Eliminar esta visita?');
-  if (!confirmar) return;
 
-  try {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert('Debes iniciar sesión');
-      return;
+  async eliminarVisita(documentId: string) {
+    const confirmar = confirm('¿Eliminar esta visita?');
+    if (!confirmar) return;
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Debes iniciar sesión');
+        return;
+      }
+
+      const res = await axios.delete(
+        this.url + `/visitas/${documentId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      console.log('Visita eliminada:', res.data);
+      alert('Visita eliminada');
+      await this.obtenerMisVisitas();
+    } catch (err) {
+      console.error('Error al eliminar visita:', err);
+      alert('No fue posible eliminar la visita');
     }
-
-    const res = await axios.delete(
-      `http://localhost:1339/api/visitas/${documentId}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-
-    console.log('Visita eliminada:', res.data);
-    alert('Visita eliminada');
-    await this.obtenerMisVisitas(); 
-  } catch (err) {
-    console.error('Error al eliminar visita:', err);
-    alert('No fue posible eliminar la visita');
   }
-}
 
- editarVisita(visita: any) {
-  localStorage.setItem('visitaId', visita.id);
-  this.router.navigateByUrl('/editar-visita');
-}
+  editarVisita(visita: any) {
+    localStorage.setItem('visitaId', visita.id);
+    this.router.navigateByUrl('/editar-visita');
+  }
 
-//CLIENTE
- crearCliente() {
-     if (this.role !== 'admin' && this.role !== 'empresa') {
+  //CLIENTE
+  crearCliente() {
+    if (this.role !== 'admin' && this.role !== 'empresa') {
       alert('No tienes permiso para crear empresas');
       return;
     }
@@ -332,30 +334,30 @@ async eliminarVisita(documentId: string) {
   }
 
   async eliminarCliente(documentId: string) {
-  const confirmar = confirm('¿Eliminar este cliente?');
-  if (!confirmar) return;
+    const confirmar = confirm('¿Eliminar este cliente?');
+    if (!confirmar) return;
 
-  try {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert('Debes iniciar sesión');
-      return;
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Debes iniciar sesión');
+        return;
+      }
+
+      const res = await axios.delete(
+        this.url + `/clientes/${documentId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      console.log('Cliente eliminado:', res.data);
+      alert('Cliente eliminado');
+      await this.obtenerMisClientes();
+
+    } catch (err) {
+      console.error('Error al eliminar cliente:', err);
+      alert('No fue posible eliminar el cliente');
     }
-
-    const res = await axios.delete(
-      `http://localhost:1339/api/clientes/${documentId}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-
-    console.log('Cliente eliminado:', res.data);
-    alert('Cliente eliminado');
-    await this.obtenerMisClientes();
-
-  } catch (err) {
-    console.error('Error al eliminar cliente:', err);
-    alert('No fue posible eliminar el cliente');
   }
-}
 
 
 }

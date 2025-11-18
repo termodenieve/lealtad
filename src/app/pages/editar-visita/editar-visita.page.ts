@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import axios from 'axios';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-editar-visita',
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
   standalone: false,
 })
 export class EditarVisitaPage implements OnInit {
-
+  url = environment.url;
   documentId = '';
   monto: number | null = null;
   fecha: string = '';
@@ -42,7 +43,7 @@ export class EditarVisitaPage implements OnInit {
 
     try {
       const { data } = await axios.get(
-        `http://localhost:1339/api/visitas/${this.documentId}?populate=cliente,empresa`,
+        this.url + `/visitas/${this.documentId}?populate=cliente,empresa`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -76,7 +77,7 @@ export class EditarVisitaPage implements OnInit {
   const token = localStorage.getItem('token');
 
   try {
-    const res = await axios.get(`http://localhost:1339/api/clientes`, {
+    const res = await axios.get(this.url + `/clientes`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -99,7 +100,7 @@ export class EditarVisitaPage implements OnInit {
     const token = localStorage.getItem('token');
 
     try {
-      const res = await axios.get(`http://localhost:1339/api/empresas`, {
+      const res = await axios.get(this.url + `/empresas`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -147,7 +148,7 @@ export class EditarVisitaPage implements OnInit {
 
     try {
       await axios.put(
-        `http://localhost:1339/api/visitas/${this.documentId}`,
+        this.url + `/visitas/${this.documentId}`,
         { data },
         { headers: { Authorization: `Bearer ${token}` } }
       );

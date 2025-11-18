@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-clientes',
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
   standalone: false,
 })
 export class ClientesPage implements OnInit {
+  url = environment.url;
   identifier: string = '';
   password: string = '';
   email: string = '';

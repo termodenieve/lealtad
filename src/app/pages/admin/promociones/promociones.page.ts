@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import axios from 'axios';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-promociones',
@@ -9,6 +10,7 @@ import axios from 'axios';
   standalone: false,
 })
 export class PromocionesPage implements OnInit {
+  url = environment.url;
   accessToken = '';
   nombre = '';
   descripcion = '';
@@ -27,7 +29,7 @@ export class PromocionesPage implements OnInit {
     const token = localStorage.getItem('token');
 
     const res = await axios.get(
-      'http://localhost:1339/api/empresas?fields=documentId,nombre',
+      this.url + '/empresas?fields=documentId,nombre',
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
@@ -61,7 +63,7 @@ export class PromocionesPage implements OnInit {
       
 
       const res = await axios.post(
-        'http://localhost:1339/api/promociones',
+        this.url + '/promociones',
         {
           data: {
             

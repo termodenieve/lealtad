@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import axios from 'axios';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-empresa',
@@ -9,6 +10,7 @@ import axios from 'axios';
   standalone: false
 })
 export class EmpresaPage implements OnInit {
+  url = environment.url;
   accessToken = '';
   nombre = '';
   direccion = '';
@@ -25,7 +27,7 @@ export class EmpresaPage implements OnInit {
     if (this.accessToken) {
       try {
         const data = await axios.get(
-          'http://localhost:1339/api/auth/google/callback?access_token=' + this.accessToken
+          this.url + '/auth/google/callback?access_token=' + this.accessToken
         );
 
         console.log('Datos de usuario desde Google:', data.data);
@@ -58,7 +60,7 @@ export class EmpresaPage implements OnInit {
     console.log("ROL DETECTADO:", rol);
 
     const res = await axios.post(
-      'http://localhost:1339/api/empresas',
+      this.url + '/empresas',
       {
         data: {
           nombre: this.nombre,

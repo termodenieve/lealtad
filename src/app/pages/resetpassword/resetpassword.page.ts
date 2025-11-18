@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import axios from 'axios';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-resetpassword',
@@ -9,7 +10,7 @@ import axios from 'axios';
   standalone: false,
 })
 export class ResetpasswordPage implements OnInit {
-
+  url = environment.url;
   password = '';
   passwordConfirmation = '';
   code = '';
@@ -23,7 +24,7 @@ export class ResetpasswordPage implements OnInit {
 
   async changePassword() {
     try {
-      await axios.post('http://localhost:1339/api/auth/reset-password', {
+      await axios.post(this.url + '/auth/reset-password', {
         password: this.password,
         passwordConfirmation: this.passwordConfirmation,
         code: this.code
