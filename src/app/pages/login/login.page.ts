@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { Platform, ToastController } from '@ionic/angular';
 import axios from 'axios';
 import { ActionPerformed, PushNotificationSchema, PushNotifications, Token } from '@capacitor/push-notifications';
 import { Backend } from 'src/app/services/backend';
@@ -22,7 +22,7 @@ export class LoginPage implements OnInit {
 
   tokenFCM: any = '';
 
-  constructor(private act: ActivatedRoute, private router: Router, private toastCtrl: ToastController, private api: Backend) {
+  constructor(private act: ActivatedRoute, private router: Router, private toastCtrl: ToastController, private api: Backend, private platform: Platform) {
     console.log(this.act.snapshot.queryParams);
     if (this.act.snapshot.queryParams['access_token']) {
       this.accessToken = this.act.snapshot.queryParams['access_token'];
@@ -36,7 +36,9 @@ export class LoginPage implements OnInit {
         console.log(data)
         localStorage.setItem('token', data.data.jwt);
         localStorage.setItem('user', JSON.stringify(data.data.user));
-        this.reqNotifications();
+        if (this.platform.is('capacitor')) {
+          this.reqNotifications();
+        }
         this.router.navigateByUrl('/home');
       } catch (error) {
         alert('error al iniciar sesion');
@@ -59,11 +61,13 @@ export class LoginPage implements OnInit {
 
       let tokenFCM: string | null = null;
 
-      try {
-        tokenFCM = await this.reqNotifications();
-        console.log('FCM token:', tokenFCM);
-      } catch (err) {
-        console.warn('Notificaciones no permitidas o error:', err);
+      if (this.platform.is('capacitor')) {
+        try {
+          tokenFCM = await this.reqNotifications();
+          console.log('FCM token:', tokenFCM);
+        } catch (err) {
+          console.warn('Notificaciones no permitidas o error:', err);
+        }
       }
 
       const meRes = await axios.get(this.url + '/users/me?populate[role]=*', {
@@ -101,18 +105,18 @@ export class LoginPage implements OnInit {
         alert('Bienvenido cliente');
         this.router.navigateByUrl('/dashboard-cliente');
         if (tokenFCM) {
-            this.api.getClientByUser(res.data.user.id, res.data.jwt)
-              .then((client: any) => {
-                console.log(client.data.data[0])
-                const clientId = client.data.data[0].documentId;
-                this.api.updateClientToken(clientId, tokenFCM!, res.data.jwt)
-                  .then(() => console.log('Token FCM actualizado correctamente'))
-                  .catch((err: any) => console.log('Error al actualizar token:', err));
-              })
-              .catch((err: any) => {
-                console.log('Error al obtener cliente:', err);
-              });
-          }
+          this.api.getClientByUser(res.data.user.id, res.data.jwt)
+            .then((client: any) => {
+              console.log(client.data.data[0])
+              const clientId = client.data.data[0].documentId;
+              this.api.updateClientToken(clientId, tokenFCM!, res.data.jwt)
+                .then(() => console.log('Token FCM actualizado correctamente'))
+                .catch((err: any) => console.log('Error al actualizar token:', err));
+            })
+            .catch((err: any) => {
+              console.log('Error al obtener cliente:', err);
+            });
+        }
       } else {
         alert('Rol no reconocido o sin permisos');
         localStorage.clear();
