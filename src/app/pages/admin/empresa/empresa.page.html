@@ -1,0 +1,23 @@
+<ion-header [translucent]="true">
+
+</ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-item>
+    <ion-label position="floating">Nombre</ion-label>
+    <ion-input [(ngModel)]="nombre"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Dirección</ion-label>
+    <ion-textarea [(ngModel)]="direccion"></ion-textarea>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Teléfono</ion-label>
+    <ion-input type="tel" [(ngModel)]="telefono"></ion-input>
+  </ion-item>
+
+  <ion-button expand="block" color="primary" (click)="crearEmpresa()">
+    Crear Empresa
+  </ion-button>
+</ion-content>

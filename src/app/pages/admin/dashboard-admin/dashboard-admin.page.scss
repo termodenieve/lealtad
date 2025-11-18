@@ -1,0 +1,196 @@
+.dashboard-admin {
+  --background: #f5f7fa;
+  font-family: 'Inter', sans-serif;
+
+  .panel {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .titulo {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .subtitulo {
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+  }
+
+  .tabs-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    .tab {
+      flex: 1;
+      padding: 0.7rem;
+      border-radius: 8px;
+      border: none;
+      background: #e5e7eb;
+      color: #374151;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.3s ease;
+
+      &.active {
+        background: #111827;
+        color: #fff;
+      }
+
+      &:hover {
+        background: #d1d5db;
+      }
+    }
+  }
+
+  .gestion {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+
+  .gestion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .btn-nueva {
+      background: #111827;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.3s ease;
+
+      &:hover {
+        background: #1f2937;
+      }
+    }
+  }
+
+  .buscador {
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+
+    ion-icon {
+      font-size: 1.2rem;
+      color: #6b7280;
+      margin-right: 0.5rem;
+    }
+
+    input {
+      border: none;
+      outline: none;
+      background: transparent;
+      flex: 1;
+      font-size: 1rem;
+    }
+  }
+
+  .resumen {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+
+    .tarjeta {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 1rem;
+
+      ion-icon {
+        font-size: 2rem;
+        color: #6366f1;
+      }
+
+      h3 {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #6b7280;
+      }
+
+      p {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #111827;
+      }
+    }
+  }
+
+  .tabla {
+    margin-top: 1.5rem;
+    overflow-x: auto;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th {
+        text-align: left;
+        color: #6b7280;
+        font-weight: 600;
+        font-size: 0.9rem;
+        padding-bottom: 0.75rem;
+      }
+
+      td {
+        border-top: 1px solid #e5e7eb;
+        padding: 0.75rem 0;
+        font-size: 0.95rem;
+        color: #111827;
+
+        .direccion {
+          color: #6b7280;
+          font-size: 0.85rem;
+        }
+
+        ion-icon {
+          font-size: 1rem;
+          vertical-align: middle;
+        }
+      }
+
+      .acciones {
+        ion-icon {
+          margin-right: 0.8rem;
+          cursor: pointer;
+          transition: 0.3s ease;
+
+          &.editar {
+            color: #3b82f6;
+            &:hover {
+              color: #1d4ed8;
+            }
+          }
+
+          &.eliminar {
+            color: #ef4444;
+            &:hover {
+              color: #b91c1c;
+            }
+          }
+        }
+      }
+    }
+  }
+}

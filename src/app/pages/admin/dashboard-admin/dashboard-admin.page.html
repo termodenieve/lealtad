@@ -1,0 +1,296 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>dashboard-admin</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="dashboard-admin ion-padding">
+
+  <div class="panel">
+    <p class="subtitulo">Panel de Administración</p>
+
+    <!-- TABS -->
+    <div class="tabs-container">
+      <button class="tab" [class.active]="tabActiva === 'empresas'" (click)="cambiarTab('empresas')">Empresas</button>
+      <button class="tab" [class.active]="tabActiva === 'promociones'" (click)="cambiarTab('promociones')">Promociones</button>
+      <button class="tab" [class.active]="tabActiva === 'visitas'" (click)="cambiarTab('visitas')">Visitas</button>
+      <button class="tab" [class.active]="tabActiva === 'clientes'" (click)="cambiarTab('clientes')">Clientes</button>
+    </div>
+
+    <!-- ========== TAB EMPRESAS ========== -->
+    <div *ngIf="tabActiva === 'empresas'">
+      <div class="gestion-header">
+        <div>
+          <h2>Gestión del Sistema</h2>
+          <p>Administra empresas, promociones y clientes desde un solo lugar</p>
+        </div>
+
+        <button class="btn-nueva" (click)="irCrearEmpresa()">
+          Nueva Empresa
+        </button>
+      </div>
+<div class="buscador">
+  <ion-icon name="search-outline"></ion-icon>
+  <input
+    type="text"
+    placeholder="Buscar empresas..."
+    [(ngModel)]="busquedaEmpresas"
+    (keyup.enter)="buscarEmpresas()" />
+</div>
+
+
+      <div class="resumen">
+        <div class="tarjeta">
+          <ion-icon name="business-outline"></ion-icon>
+          <div>
+            <h3>Total Empresas</h3>
+            <p>{{ totalEmpresas }}</p>
+          </div>
+        </div>
+
+        <div class="tarjeta">
+          <ion-icon name="business-outline"></ion-icon>
+          <div>
+            <h3>Total Promociones</h3>
+            <p>{{ totalPromociones }}</p>
+          </div>
+        </div>
+
+        <div class="tarjeta">
+          <ion-icon name="people-outline"></ion-icon>
+          <div>
+            <h3>Clientes Totales</h3>
+            <p>{{ totalClientes }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabla">
+        <table>
+          <thead>
+            <tr>
+              <th>Empresa</th>
+              <th>Contacto</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let empresa of empresas">
+              <td>
+                <strong>{{ empresa.nombre }}</strong><br />
+                <span class="direccion">Dirección: {{ empresa.direccion }}</span>
+              </td>
+              <td>
+                <ion-icon name="call-outline"></ion-icon> {{ empresa.telefono }}
+              </td>
+              <td class="acciones">
+                <ion-icon name="create-outline" class="editar" (click)="editarEmpresa(empresa)"></ion-icon>
+                <ion-icon name="trash-outline" class="eliminar" (click)="eliminarEmpresa(empresa.documentId)"></ion-icon>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ========== TAB PROMOCIONES ========== -->
+    <div *ngIf="tabActiva === 'promociones'">
+      <div class="gestion-header">
+        <div>
+          <h2>Gestión de Promociones</h2>
+          <p>Administra promociones y empresas participantes</p>
+        </div>
+        <button class="btn-nueva" (click)="CrearPromociones()">
+          Nueva Empresa
+        </button>
+      </div>
+
+    <div class="buscador">
+  <ion-icon name="search-outline"></ion-icon>
+  <input
+    type="text"
+    placeholder="Buscar promociones..."
+    [(ngModel)]="busquedaPromociones"
+    (keyup.enter)="buscarPromociones()" />
+</div>
+
+
+
+      <div class="resumen">
+        <div class="tarjeta">
+          <ion-icon name="gift-outline"></ion-icon>
+          <div>
+            <h3>Total Promociones</h3>
+            <p>{{ totalPromociones }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabla">
+        <table>
+          <thead>
+            <tr>
+              <th>Promoción</th>
+              <th>Empresa</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let promo of promociones">
+              <td>
+                <strong>{{ promo.nombre }}</strong><br />
+                <span class="descripcion">{{ promo.descripcion }}</span>
+              </td>
+
+              <td>{{ promo.empresa?.nombre || 'Sin empresa' }}</td>
+
+              <td class="acciones">
+                <ion-icon name="create-outline" class="editar" (click)="editarPromocion(promo)"></ion-icon>
+                <ion-icon name="trash-outline" class="eliminar" (click)="eliminarPromocion(promo.documentId)"></ion-icon>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ========== TAB VISITAS ========== -->
+    <div *ngIf="tabActiva === 'visitas'" class="tabla-visitas">
+      <div class="gestion-header">
+        <div>
+          <h2>Gestión de Visitas</h2>
+          <p>Administra las visitas registradas por las empresas</p>
+        </div>
+        <button class="btn-nueva" (click)="crearVisita()">Nueva visita</button>
+      </div>
+
+     <div class="buscador">
+  <ion-icon name="search-outline"></ion-icon>
+  <input
+    type="text"
+    placeholder="Buscar por empresa o cliente..."
+    [(ngModel)]="busquedaVisitas"
+    (keyup.enter)="buscarVisitas()" />
+</div>
+
+
+      <div class="resumen">
+        <div class="tarjeta">
+          <ion-icon name="gift-outline"></ion-icon>
+          <div>
+            <h3>Total Visitas</h3>
+            <p>{{ totalVisitas }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabla">
+        <table>
+          <thead>
+            <tr>
+              <th>Empresa</th>
+              <th>Cliente</th>
+              <th>Fecha</th>
+              <th>Monto</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let visita of visitas">
+              <td>
+                <ion-icon name="business-outline"></ion-icon> {{ visita.empresa }}
+              </td>
+
+              <td>
+                <ion-icon name="person-outline"></ion-icon> {{ visita.cliente }}
+              </td>
+
+              <td>
+                <ion-icon name="calendar-outline"></ion-icon>
+                {{ visita.fecha | date:'d \'de\' MMMM \'de\' y' }}
+              </td>
+
+              <td>${{ visita.monto | number:'1.2-2' }}</td>
+
+              <td class="acciones">
+                <ion-icon name="create-outline" class="editar"></ion-icon>
+                <ion-icon name="trash-outline" class="eliminar" (click)="eliminarVisita(visita.documentId)"></ion-icon>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div *ngIf="visitas.length === 0 && !loading" class="sin-datos">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          <p>No hay visitas registradas.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== TAB CLIENTES ========== -->
+    <div *ngIf="tabActiva === 'clientes'">
+      <div class="gestion-header">
+        <div>
+          <h2>Clientes</h2>
+          <p>Consulta todos los clientes del sistema</p>
+        </div>
+      </div>
+      <div class="buscador">
+  <ion-icon name="search-outline"></ion-icon>
+  <input
+    type="text"
+    placeholder="Buscar clientes..."
+    [(ngModel)]="busquedaClientes"
+    (keyup.enter)="buscarClientes()" />
+</div>
+
+
+      <div class="resumen">
+        <div class="tarjeta">
+          <ion-icon name="people-outline"></ion-icon>
+          <div>
+            <h3>Total Clientes</h3>
+            <p>{{ clientes.length }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabla" *ngIf="clientes.length > 0; else sinClientes">
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+              <th>Empresa</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let cliente of clientes">
+              <td>{{ cliente.nombre }}</td>
+              <td>{{ cliente.correo }}</td>
+              <td>{{ cliente.telefono }}</td>
+              <td>{{ cliente.empresa }}</td>
+
+              <td class="acciones">
+                <ion-icon name="create-outline" class="editar"></ion-icon>
+                <ion-icon name="trash-outline" class="eliminar"></ion-icon>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #sinClientes>
+        <div class="sin-datos">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          <p>No hay clientes registrados.</p>
+        </div>
+      </ng-template>
+    </div>
+
+  </div>
+</ion-content>

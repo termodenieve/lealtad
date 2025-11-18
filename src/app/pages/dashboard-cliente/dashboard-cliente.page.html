@@ -1,0 +1,143 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Mi Panel de Cliente</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="dashboard-cliente ion-padding">
+  <div class="panel">
+    <p class="subtitulo">Bienvenido, {{ clientes?.username }}</p>
+
+    <!-- ======= TABS ======= -->
+    <div class="tabs-container">
+      <button class="tab" [class.active]="tabActiva === 'perfil'" (click)="cambiarTab('perfil')">
+        Mi Perfil
+      </button>
+      <button class="tab" [class.active]="tabActiva === 'promociones'" (click)="cambiarTab('promociones')">
+        Promociones
+      </button>
+      <button class="tab" [class.active]="tabActiva === 'empresas'" (click)="cambiarTab('empresas')">
+        Empresas
+      </button>
+      <button class="tab" [class.active]="tabActiva === 'visitas'" (click)="cambiarTab('visitas')">
+        Mis Visitas
+      </button>
+    </div>
+
+    <!-- ================== TAB PERFIL ================== -->
+    <div *ngIf="tabActiva === 'perfil'">
+      <div class="gestion-header">
+        <div>
+          <h2>Mi Perfil</h2>
+          <p>Consulta y edita tus datos personales</p>
+        </div>
+        <button class="btn-nueva" (click)="editarPerfil()">Editar Perfil</button>
+      </div>
+
+      <div class="perfil-info">
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <div>
+          <p><strong>Nombre:</strong> {{ clientes?.username }}</p>
+          <p><strong>Correo:</strong> {{ clientes?.email }}</p>
+          <p><strong>Teléfono:</strong> {{ clientes?.telefono }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================== TAB PROMOCIONES ================== -->
+    <div *ngIf="tabActiva === 'promociones'">
+      <div class="gestion-header">
+        <div>
+          <h2>Promociones Disponibles</h2>
+          <p>Explora las promociones activas de tus empresas favoritas</p>
+        </div>
+      </div>
+
+      <div class="grid-promos" *ngIf="promociones.length > 0; else sinPromos">
+        <div class="tarjeta-promo" *ngFor="let promo of promociones">
+          <ion-icon name="gift-outline"></ion-icon>
+          <div class="info">
+            <h3>{{ promo.titulo }}</h3>
+            <p>{{ promo.descripcion }}</p>
+            <p><strong>Válido hasta:</strong> {{ promo.fechaFin | date: 'd MMM y' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #sinPromos>
+        <div class="sin-datos">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          <p>No hay promociones disponibles por ahora.</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- ================== TAB EMPRESAS ================== -->
+    <div *ngIf="tabActiva === 'empresas'">
+      <div class="gestion-header">
+        <div>
+          <h2>Empresas Registradas</h2>
+          <p>Explora las empresas con las que puedes registrarte</p>
+        </div>
+      </div>
+
+      <div class="grid-empresas" *ngIf="empresas.length > 0; else sinEmpresas">
+        <div class="tarjeta-empresa" *ngFor="let empresa of empresas">
+          <ion-icon name="business-outline"></ion-icon>
+          <div class="info">
+            <h3>{{ empresa.nombre }}</h3>
+            <p><strong>Dirección:</strong> {{ empresa.direccion }}</p>
+            <p><strong>Teléfono:</strong> {{ empresa.telefono }}</p>
+          </div>
+          <button class="btn-registrar">Registrarme</button>
+        </div>
+      </div>
+
+      <ng-template #sinEmpresas>
+        <div class="sin-datos">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          <p>No hay empresas registradas por ahora.</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- ================== TAB VISITAS ================== -->
+    <div *ngIf="tabActiva === 'visitas'">
+      <div class="gestion-header">
+        <div>
+          <h2>Mis Visitas</h2>
+          <p>Consulta tu historial de visitas a las empresas</p>
+        </div>
+      </div>
+
+      <div class="tabla" *ngIf="visitas.length > 0; else sinVisitas">
+        <table>
+          <thead>
+            <tr>
+              <th>Empresa</th>
+              <th>Cliente</th>
+              <th>Fecha</th>
+              <th>Monto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let visita of visitas">
+              <td>{{ visita.empresa?.nombre }}</td>
+              <td>{{ visita.cliente?.nombre }}</td>
+              <td>{{ visita.fecha | date: 'd MMM y' }}</td>
+              <td>${{ visita.monto | number: '1.2-2' }}</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #sinVisitas>
+        <div class="sin-datos">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          <p>No tienes visitas registradas aún.</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</ion-content>

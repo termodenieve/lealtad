@@ -1,0 +1,54 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Editar Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Información del Cliente</ion-card-title>
+      <ion-card-subtitle>Puedes actualizar tus datos personales</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <!-- Nombre -->
+      <ion-item>
+        <ion-label position="floating">Nombre completo</ion-label>
+        <ion-input [(ngModel)]="nombre"></ion-input>
+      </ion-item>
+
+      <!-- Telefono -->
+      <ion-item>
+        <ion-label position="floating">Teléfono</ion-label>
+        <ion-input type="tel" [(ngModel)]="telefono"></ion-input>
+      </ion-item>
+
+      <!-- Correo (solo lectura porque viene desde user) -->
+      <ion-item>
+        <ion-label position="floating">Correo</ion-label>
+        <ion-input type="email" [(ngModel)]="correo" readonly></ion-input>
+      </ion-item>
+
+      <ion-note color="medium">
+        *El correo no puede modificarse desde esta sección.
+      </ion-note>
+
+      <br />
+
+      <!-- Botón Guardar -->
+      <ion-button expand="full" color="success" (click)="editarCliente()">
+        Guardar cambios
+      </ion-button>
+
+      <!-- Volver -->
+      <ion-button expand="full" fill="clear" color="medium" routerLink="/dashboard-cliente">
+        Cancelar
+      </ion-button>
+
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

@@ -1,0 +1,242 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Mi Panel Empresarial</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="dashboard-empresa ion-padding">
+  <div class="panel">
+    <p class="subtitulo">Bienvenido, {{ usuario.username }}</p>
+
+
+    <div class="tabs-container">
+      <button class="tab" [class.active]="tabActiva === 'empresas'" (click)="cambiarTab('empresas')">Mis
+        Empresas</button>
+      <button class="tab" [class.active]="tabActiva === 'promociones'" (click)="cambiarTab('promociones')">Mis
+        Promociones</button>
+      <button class="tab" [class.active]="tabActiva === 'visitas'" (click)="cambiarTab('visitas')">Mis Visitas</button>
+      <button class="tab" [class.active]="tabActiva === 'clientes'" (click)="cambiarTab('clientes')">Mis
+        Clientes</button>
+    </div>
+
+
+    <div *ngIf="tabActiva === 'empresas'">
+      <div class="gestion-header">
+        <div>
+          <h2>Mis Empresas</h2>
+          <p>Consulta y administra las empresas registradas bajo tu cuenta</p>
+        </div>
+        <button class="btn-nueva" (click)="irCrearEmpresa()">
+          Nueva Empresa
+        </button>
+      </div>
+
+      <div class="buscador">
+        <ion-icon name="search-outline"></ion-icon>
+        <input type="text" placeholder="Buscar empresa..." />
+      </div>
+
+      <div class="resumen">
+        <div class="tarjeta">
+          <ion-icon name="business-outline"></ion-icon>
+          <div>
+            <h3>Total de Mis Empresas</h3>
+            <p>{{ misEmpresas.length }}</p>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="grid-empresas" *ngIf="misEmpresas.length > 0; else sinEmpresas">
+        <div class="tarjeta-empresa" *ngFor="let empresa of misEmpresas">
+          <div class="info-empresa">
+            <h3>{{ empresa.nombre }}</h3>
+
+            <p><strong>Dirección:</strong> {{ empresa.direccion }}</p>
+            <p><strong>Teléfono:</strong> {{ empresa.telefono }}</p>
+          </div>
+
+          <div class="acciones">
+            <button class="btn-editar" (click)="editarEmpresa(empresa)">
+              <ion-icon name="create-outline"></ion-icon> Editar
+            </button>
+            <button class="btn-eliminar" (click)="eliminarEmpresa(empresa.documentId)">
+              <ion-icon name="trash-outline"></ion-icon> Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #sinEmpresas>
+        <div class="sin-datos">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          <p>No tienes empresas registradas aún.</p>
+        </div>
+      </ng-template>
+    </div>
+
+
+    <div *ngIf="tabActiva === 'promociones'">
+      <div class="gestion-header">
+        <div>
+          <h2>Mis Promociones</h2>
+          <p>Administra las promociones de tus empresas</p>
+        </div>
+        <button class="btn-nueva" (click)="irCrearProm()">Nueva Promoción</button>
+      </div>
+
+      <div class="buscador">
+        <ion-icon name="search-outline"></ion-icon>
+        <input type="text" placeholder="Buscar promoción..." />
+      </div>
+
+      <div class="resumen">
+        <div class="tarjeta">
+          <ion-icon name="gift-outline"></ion-icon>
+          <div>
+            <h3>Total de Mis Promociones</h3>
+            <p>{{ misPromociones.length }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabla" *ngIf="misPromociones.length > 0; else sinPromos">
+        <table>
+          <thead>
+            <tr>
+              <th>Promoción</th>
+              <th>Empresa</th>
+              <th>Descripción</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let promo of misPromociones">
+              <td>{{ promo.nombre }}</td>
+              <td>{{ promo.empresa?.nombre }}</td>
+              <td>{{ promo.descripcion }}</td>
+
+              <td class="acciones">
+                <ion-icon name="create-outline" class="editar" (click)="editarProm(promo)"></ion-icon>
+                <ion-icon name="trash-outline" class="eliminar" (click)="eliminarProm(promo.documentId)"></ion-icon>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #sinPromos>
+        <div class="sin-datos">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          <p>No tienes promociones registradas.</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- ================== TAB VISITAS ================== -->
+    <div *ngIf="tabActiva === 'visitas'">
+      <div class="gestion-header">
+        <div>
+          <h2>Mis Visitas</h2>
+          <p>Consulta las visitas registradas en tus empresas</p>
+        </div>
+        <button class="btn-nueva" (click)="crearVisita()">
+          Nueva visita
+        </button>
+      </div>
+
+      <div class="resumen">
+        <div class="tarjeta">
+          <ion-icon name="footsteps-outline"></ion-icon>
+          <div>
+            <h3>Total de Mis Visitas</h3>
+            <p>{{ misVisitas.length }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabla" *ngIf="misVisitas.length > 0; else sinVisitas">
+        <table>
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Empresa</th>
+              <th>Fecha</th>
+              <th>Monto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let visita of misVisitas">
+              <td>{{ visita.cliente }}</td>
+              <td>{{ visita.empresa }}</td>
+              <td>{{ visita.fecha | date: 'd MMM y' }}</td>
+              <td>${{ visita.monto | number: '1.2-2' }}</td>
+              <td class="acciones">
+                <ion-icon name="create-outline" class="editar" (click)="editarVisita(visita.documentId)"></ion-icon>
+                <ion-icon name="trash-outline" class="eliminar" (click)="eliminarVisita(visita.documentId)"></ion-icon>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #sinVisitas>
+        <div class="sin-datos">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          <p>No hay visitas registradas para tus empresas.</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <div *ngIf="tabActiva === 'clientes'">
+      <div class="gestion-header">
+        <div>
+          <h2>Mis Clientes</h2>
+          <p>Consulta los clientes que interactúan con tus promociones o empresas</p>
+        </div>
+      </div>
+
+      <div class="resumen">
+        <div class="tarjeta">
+          <ion-icon name="people-outline"></ion-icon>
+          <div>
+            <h3>Total de Mis Clientes</h3>
+            <p>{{ misClientes.length }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabla" *ngIf="misClientes.length > 0; else sinClientes">
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+              <th>Empresa</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cliente of misClientes">
+              <td>{{ cliente.nombre }}</td>
+              <td>{{ cliente.correo }}</td>
+              <td>{{ cliente.telefono }}</td>
+              <td>{{ cliente.empresa }}</td>
+              <td class="acciones">
+                <ion-icon name="create-outline" class="editar"></ion-icon>
+                <ion-icon name="trash-outline" class="eliminar" (click)="eliminarCliente(cliente.docuemtId)"></ion-icon>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #sinClientes>
+        <div class="sin-datos">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          <p>No tienes clientes registrados aún.</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</ion-content>

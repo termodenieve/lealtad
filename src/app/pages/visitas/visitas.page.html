@@ -1,0 +1,36 @@
+<ion-header [translucent]="true">
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-item>
+    <ion-label position="floating">Monto</ion-label>
+    <ion-input type="number" [(ngModel)]="monto" required></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating"></ion-label>
+    <ion-datetime presentation="date" [(ngModel)]="fecha" required></ion-datetime>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Empresa</ion-label>
+    <ion-select [(ngModel)]="empresaId" interface="popover" placeholder="Selecciona una empresa">
+      <ion-select-option *ngFor="let e of empresas" [value]="e.id">
+        {{ e.nombre }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Cliente</ion-label>
+    <ion-select [(ngModel)]="clienteId" interface="popover" placeholder="Selecciona un cliente">
+      <ion-select-option *ngFor="let c of clientes" [value]="c.id">
+        {{ c.nombre }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-button expand="block" class="ion-margin-top" color="success" (click)="crearVisita()">
+    Registrar Visita
+  </ion-button>
+
+</ion-content>

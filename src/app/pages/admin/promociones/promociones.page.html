@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Crear Promoción</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-item>
+    <ion-label position="floating">Nombre de la promoción</ion-label>
+    <ion-input [(ngModel)]="nombre"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Descripción</ion-label>
+    <ion-textarea [(ngModel)]="descripcion"></ion-textarea>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Número de visitas</ion-label>
+    <ion-input type="number" [(ngModel)]="visitas"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Empresa</ion-label>
+    <ion-select [(ngModel)]="empresaId">
+      <ion-select-option *ngFor="let e of empresas" [value]="e.id">
+        {{ e.nombre }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-button expand="full" class="ion-margin-top" (click)="crearPromocion()">
+    Crear Promoción
+  </ion-button>
+
+</ion-content>

@@ -1,0 +1,172 @@
+import { Component, OnInit } from '@angular/core';
+import axios from 'axios';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-editar-visita',
+  templateUrl: './editar-visita.page.html',
+  styleUrls: ['./editar-visita.page.scss'],
+  standalone: false,
+})
+export class EditarVisitaPage implements OnInit {
+
+  documentId = '';
+  monto: number | null = null;
+  fecha: string = '';
+  clienteId: string = '';
+  empresaId: string = '';
+
+  clientes: any[] = [];
+  empresas: any[] = [];
+  visita: any = {};
+
+  constructor(private router: Router) {}
+
+  async ngOnInit() {
+    this.documentId = localStorage.getItem('visitaId') || '';
+
+    if (!this.documentId) {
+      alert('No se encontró la visita a editar');
+      this.router.navigateByUrl('/dashboard-empresa');
+      return;
+    }
+
+    await this.obtenerClientes();
+    await this.obtenerEmpresas();
+    await this.cargarVisita();
+  }
+
+  // -------------------- Cargar datos de la visita --------------------
+  async cargarVisita() {
+    const token = localStorage.getItem('token');
+
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1339/api/visitas/${this.documentId}?populate=cliente,empresa`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const attrs = data?.data?.attributes || {};
+
+      this.visita = {
+        monto: attrs.monto,
+        fecha: attrs.fecha,
+        clienteId: attrs.cliente?.data?.id || '',
+        empresaId: attrs.empresa?.data?.id || '',
+      };
+
+      this.monto = this.visita.monto;
+      this.fecha = this.visita.fecha;
+      this.clienteId = this.visita.clienteId;
+      this.empresaId = this.visita.empresaId;
+
+      console.log('Visita cargada:', this.visita);
+      
+
+    } catch (error: any) {
+      console.error('Error al cargar Visita:', error.response?.data || error);
+      alert('No se pudo cargar la información de la visita');
+    }
+  }
+
+  // -------------------- Obtener clientes --------------------
+  async obtenerClientes() {
+  const token = localStorage.getItem('token');
+
+  try {
+    const res = await axios.get(`http://localhost:1339/api/clientes`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    this.clientes = res.data.data.map((c: any) => ({
+      id: c.id,
+      nombre: c.attributes?.nombre || c.nombre || "Sin nombre",
+    }));
+
+    console.log("CLIENTES CARGADOS:", this.clientes);
+
+  } catch (error: any) {
+    console.error("Error al cargar clientes:", error.response?.data || error);
+    alert("No se pudieron cargar los clientes");
+  }
+}
+
+
+  // -------------------- Obtener empresas --------------------
+  async obtenerEmpresas() {
+    const token = localStorage.getItem('token');
+
+    try {
+      const res = await axios.get(`http://localhost:1339/api/empresas`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      this.empresas = res.data.data.map((e: any) => ({
+        id: e.id,
+        nombre: e.attributes.nombre,
+      }));
+
+    } catch (error) {
+      console.error("Error al cargar empresas:", error);
+      alert("No se pudieron cargar las empresas");
+    }
+  }
+
+  // -------------------- Guardar cambios --------------------
+  async editarVisita() {
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+    if (!token) {
+      alert('Debes iniciar sesión');
+      this.router.navigateByUrl('/login');
+      return;
+    }
+
+    const rol = user.role?.type || user.role?.name || '';
+
+    if (rol !== "admin" && rol !== "empresa") {
+      alert("No tienes permisos para editar visitas.");
+      return;
+    }
+
+    // Validaciones
+    if (!this.clienteId || !this.empresaId) {
+      alert("Selecciona cliente y empresa");
+      return;
+    }
+
+    const data: any = {
+      monto: this.monto,
+      fecha: this.fecha,
+      cliente: this.clienteId,
+      empresa: this.empresaId,
+    };
+
+    try {
+      await axios.put(
+        `http://localhost:1339/api/visitas/${this.documentId}`,
+        { data },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      alert("Visita actualizada correctamente");
+
+      if (rol === "admin") {
+        this.router.navigateByUrl("/dashboard-admin");
+      } else {
+        this.router.navigateByUrl("/dashboard-empresa");
+      }
+
+    } catch (error: any) {
+      console.error("Error al editar visita:", error.response?.data || error);
+      alert("Error al actualizar la visita");
+    }
+  }
+
+  cancelarEdicion() {
+    this.router.navigateByUrl('/dashboard-empresa');
+  }
+}
