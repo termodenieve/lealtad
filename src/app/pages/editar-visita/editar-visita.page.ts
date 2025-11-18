@@ -36,7 +36,7 @@ export class EditarVisitaPage implements OnInit {
     await this.cargarVisita();
   }
 
-  // -------------------- Cargar datos de la visita --------------------
+
   async cargarVisita() {
     const token = localStorage.getItem('token');
 
@@ -71,7 +71,7 @@ export class EditarVisitaPage implements OnInit {
     }
   }
 
-  // -------------------- Obtener clientes --------------------
+
   async obtenerClientes() {
   const token = localStorage.getItem('token');
 
@@ -114,7 +114,7 @@ export class EditarVisitaPage implements OnInit {
     }
   }
 
-  // -------------------- Guardar cambios --------------------
+
   async editarVisita() {
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -132,7 +132,7 @@ export class EditarVisitaPage implements OnInit {
       return;
     }
 
-    // Validaciones
+ 
     if (!this.clienteId || !this.empresaId) {
       alert("Selecciona cliente y empresa");
       return;

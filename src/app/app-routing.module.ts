@@ -33,19 +33,12 @@ const routes: Routes = [
     path: 'promociones',
     loadChildren: () => import('./pages/admin/promociones/promociones.module').then( m => m.PromocionesPageModule)
   },
-  {
-    path: 'ver-empresas',
-    loadChildren: () => import('./pages/admin/ver-empresas/ver-empresas.module').then( m => m.VerEmpresasPageModule)
-  },
+  
   {
     path: 'dashboard-admin',
     loadChildren: () => import('./pages/admin/dashboard-admin/dashboard-admin.module').then( m => m.DashboardAdminPageModule)
     },
-  {
-    
-    path: 'ver-promociones',
-    loadChildren: () => import('./pages/admin/ver-promociones/ver-promociones.module').then( m => m.VerPromocionesPageModule)
-  },
+  
   {
     path: 'editar-empresa',
     loadChildren: () => import('./pages/admin/editar-empresa/editar-empresa.module').then( m => m.EditarEmpresaPageModule)
@@ -54,10 +47,7 @@ const routes: Routes = [
     path: 'editar-promocion',
     loadChildren: () => import('./pages/admin/editar-promocion/editar-promocion.module').then( m => m.EditarPromocionPageModule)
   },
-  {
-    path: 'ver-visitas',
-    loadChildren: () => import('./pages/admin/ver-visitas/ver-visitas.module').then( m => m.VerVisitasPageModule)
-  },
+  
   {
     path: 'visitas',
     loadChildren: () => import('./pages/visitas/visitas.module').then( m => m.VisitasPageModule)

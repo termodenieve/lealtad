@@ -3,7 +3,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 
 @Component({
   selector: 'app-layout',
-  standalone: true,  // 👈 por eso se importa, no se declara
+  standalone: true,  
   imports: [SidebarComponent],
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],

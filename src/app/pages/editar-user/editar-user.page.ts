@@ -51,7 +51,7 @@ export class EditarUserPage implements OnInit {
       this.nombre = datos.nombre || '';
       this.telefono = datos.telefono || '';
 
-      // Extraer correo desde user
+
       this.correo = datos.user?.data?.attributes?.email || '';
 
       this.cliente = datos;
@@ -64,9 +64,6 @@ export class EditarUserPage implements OnInit {
     }
   }
 
-  // ===========================
-  // ACTUALIZAR CLIENTE
-  // ===========================
   async editarCliente() {
     const token = localStorage.getItem('token');
 

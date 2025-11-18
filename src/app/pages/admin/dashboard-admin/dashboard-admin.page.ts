@@ -29,7 +29,7 @@ busquedaClientes: string = '';
 buscarEmpresas() {
   const term = (this.busquedaEmpresas || '').toLowerCase().trim();
   if (!term) {
-    this.obtenerEmpresas(); // si vacío, recarga todas
+    this.obtenerEmpresas(); 
     return;
   }
   this.empresas = this.empresas.filter((e: any) => {
