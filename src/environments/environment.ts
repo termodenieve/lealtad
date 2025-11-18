@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  url: "https://hiring-gradually-kind-previous.trycloudflare.com/api",
+  url: "http://localhost:1339/api",
   production: false
 };
 

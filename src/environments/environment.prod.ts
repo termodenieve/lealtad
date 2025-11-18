@@ -1,4 +1,4 @@
 export const environment = {
-  url: "https://hiring-gradually-kind-previous.trycloudflare.com/api",
+  url: "http://localhost:1339/api",
   production: true
 };
