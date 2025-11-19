@@ -95,7 +95,6 @@ export class EditarVisitaPage implements OnInit {
 }
 
 
-  // -------------------- Obtener empresas --------------------
   async obtenerEmpresas() {
     const token = localStorage.getItem('token');
 

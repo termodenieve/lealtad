@@ -66,12 +66,17 @@ const routes: Routes = [
   },
   {
     path: 'editar-visita',
-    loadChildren: () => import('./pages/editar-visita/editar-visita.module').then( m => m.EditarVisitaPageModule)
+    loadChildren: () => import('./pages/admin/editar-visita/editar-visita.module').then( m => m.EditarVisitaPageModule)
   },
   {
     path: 'editar-user',
     loadChildren: () => import('./pages/editar-user/editar-user.module').then( m => m.EditarUserPageModule)
   },
+  {
+    path: 'register',
+    loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule)
+  },
+  
   
 
 

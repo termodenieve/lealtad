@@ -16,6 +16,7 @@ export class DashboardClientePage implements OnInit {
   promociones: any[] = [];
   visitas: any[] = [];
   url = environment.url;
+  usuario: any = {};
 
   constructor(private router: Router) {}
 
@@ -29,13 +30,36 @@ export class DashboardClientePage implements OnInit {
     this.tabActiva = tab;
   }
 
-  async obtenerUsuario() {
-    const userStr = localStorage.getItem('user');
-    if (userStr) {
-      this.clientes = JSON.parse(userStr);
-      console.log('Usuario cargado:', this.clientes);
+async obtenerUsuario() {
+  const userStr = localStorage.getItem('user');
+  const token = localStorage.getItem('token');
+
+  if (!userStr || !token) return;
+
+  this.usuario = JSON.parse(userStr);
+
+  try {
+    const res = await axios.get(
+      `http://localhost:1337/api/clientes/getByUser/${this.usuario.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    console.log("Respuesta cliente:", res.data);
+
+    if (res.data.data.length > 0) {
+      this.clientes = res.data.data[0];   // <- AQUI ESTA TU TELEFONO Y NOMBRE DEL CLIENTE
     }
+
+  } catch (error) {
+    console.log("Error obteniendo cliente:", error);
   }
+}
+
+
 
   async cargarEmpresas() {
     try {
@@ -80,6 +104,18 @@ editarPerfil() {
   localStorage.setItem('clienteId', this.clientes.id);
   this.router.navigateByUrl('/editar-user');
 }
+
+irA(tab: string) {
+  this.tabActiva = tab;
+  const menu = document.querySelector('ion-menu');
+  if (menu) menu.close();
+}
+
+logout() {
+  localStorage.clear();
+  this.router.navigateByUrl('/login');
+}
+
 
 
 

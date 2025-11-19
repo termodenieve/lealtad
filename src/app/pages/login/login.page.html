@@ -6,7 +6,6 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
 
-  <!-- 🔹 Login con cuenta local -->
   <ion-item>
     <ion-label position="floating">Usuario o Correo</ion-label>
     <ion-input [(ngModel)]="identifier"></ion-input>
@@ -30,5 +29,15 @@
       Iniciar con Google
     </ion-button>
   </a>
+
+  <ion-button 
+  expand="block" 
+  fill="clear" 
+  (click)="goToRegistro()"
+  class="ion-margin-top">
+
+  Crear cuenta / Registrarme
+</ion-button>
+
 
 </ion-content>

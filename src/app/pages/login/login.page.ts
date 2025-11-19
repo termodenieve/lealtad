@@ -150,4 +150,8 @@ export class LoginPage implements OnInit {
       });
     });
   }
+  goToRegistro() {
+  this.router.navigate(['/register']);
+}
+
 }

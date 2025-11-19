@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Registro de Cliente</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+
+  <div class="loading-container" *ngIf="loading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Registrando...</p>
+  </div>
+
+  
+  <form (ngSubmit)="registrar()" *ngIf="!loading">
+
+    <ion-item>
+      <ion-label position="floating">Nombre completo</ion-label>
+      <ion-input [(ngModel)]="nombre" name="nombre" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Teléfono</ion-label>
+      <ion-input [(ngModel)]="telefono" name="telefono" type="tel"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Correo electrónico</ion-label>
+      <ion-input [(ngModel)]="email" name="email" type="email" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input [(ngModel)]="password" name="password" type="password" required></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" type="submit" color="success" class="ion-margin-top">
+      Crear Cuenta
+    </ion-button>
+
+  </form>
+
+
+  <div class="divider">
+    <span>O continúa con</span>
+  </div>
+
+
+  <ion-button expand="block" color="danger"  fill="solid">
+    <ion-icon name="logo-google" slot="start"></ion-icon>
+    Registrarse con Google
+  </ion-button>
+
+</ion-content>
