@@ -320,7 +320,7 @@ export class DashboardEmpresaPage implements OnInit {
   }
 
   editarVisita(visita: any) {
-    localStorage.setItem('visitaId', visita.id);
+    localStorage.setItem('visitaId', visita);
     this.router.navigateByUrl('/editar-visita');
   }
 

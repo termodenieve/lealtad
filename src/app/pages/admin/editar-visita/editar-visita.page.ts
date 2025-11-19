@@ -43,19 +43,20 @@ export class EditarVisitaPage implements OnInit {
 
     try {
       const { data } = await axios.get(
-        this.url + `/visitas/${this.documentId}?populate=cliente,empresa`,
+        this.url + `/visitas/${this.documentId}?populate=*`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
-      const attrs = data?.data?.attributes || {};
+      const attrs = data.data;
+      console.log(attrs)
 
       this.visita = {
         monto: attrs.monto,
         fecha: attrs.fecha,
-        clienteId: attrs.cliente?.data?.id || '',
-        empresaId: attrs.empresa?.data?.id || '',
+        clienteId: attrs.cliente.id || '',
+        empresaId: attrs.empresa.id || '',
       };
 
       this.monto = this.visita.monto;
@@ -64,6 +65,7 @@ export class EditarVisitaPage implements OnInit {
       this.empresaId = this.visita.empresaId;
 
       console.log('Visita cargada:', this.visita);
+      console.log(this.clienteId, this.empresaId);
       
 
     } catch (error: any) {
@@ -81,10 +83,7 @@ export class EditarVisitaPage implements OnInit {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    this.clientes = res.data.data.map((c: any) => ({
-      id: c.id,
-      nombre: c.attributes?.nombre || c.nombre || "Sin nombre",
-    }));
+    this.clientes = res.data.data
 
     console.log("clientes jijija:", this.clientes);
 
@@ -103,10 +102,9 @@ export class EditarVisitaPage implements OnInit {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      this.empresas = res.data.data.map((e: any) => ({
-        id: e.id,
-        nombre: e.attributes.nombre,
-      }));
+      this.empresas = res.data.data
+
+      console.log(this.empresas)
 
     } catch (error) {
       console.error("Error al cargar empresas:", error);
