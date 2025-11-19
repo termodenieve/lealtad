@@ -105,11 +105,6 @@ editarPerfil() {
   this.router.navigateByUrl('/editar-user');
 }
 
-irA(tab: string) {
-  this.tabActiva = tab;
-  const menu = document.querySelector('ion-menu');
-  if (menu) menu.close();
-}
 
 logout() {
   localStorage.clear();

@@ -1,12 +1,21 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Mi Panel de Cliente</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
+
 <ion-content class="dashboard-cliente ion-padding">
   <div class="panel">
-    <p class="subtitulo">Bienvenido, {{ clientes?.username }}</p>
+    <p class="subtitulo">Bienvenido, {{ usuario?.username }}</p>
+    
+
 
     <!-- ======= TABS ======= -->
     <div class="tabs-container">
@@ -26,6 +35,7 @@
 
     <!-- ================== TAB PERFIL ================== -->
     <div *ngIf="tabActiva === 'perfil'">
+
       <div class="gestion-header">
         <div>
           <h2>Mi Perfil</h2>
@@ -40,10 +50,11 @@
 <p><strong>Usuario:</strong> {{ usuario?.username }}</p>
 <p><strong>Correo:</strong> {{ usuario?.email }}</p>
 
-
+          <p><strong>Teléfono:</strong> {{ clientes?.telefono }}</p>
         </div>
       </div>
     </div>
+
 
     <!-- ================== TAB PROMOCIONES ================== -->
     <div *ngIf="tabActiva === 'promociones'">

@@ -408,9 +408,10 @@ export class DashboardAdminPage implements OnInit {
     this.router.navigateByUrl('/editar-visita');
   }
 
-  cerrarSesion() {
-    localStorage.clear();
-    this.router.navigateByUrl('/login');
-  }
+  logout() {
+  localStorage.clear();
+  this.router.navigateByUrl('/login');
+}
+
 
 }

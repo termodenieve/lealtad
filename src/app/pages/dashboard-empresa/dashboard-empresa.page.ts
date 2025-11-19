@@ -332,6 +332,10 @@ export class DashboardEmpresaPage implements OnInit {
     }
     this.router.navigateByUrl('/clientes');
   }
+   logout() {
+  localStorage.clear();
+  this.router.navigateByUrl('/login');
+}
 
   async eliminarCliente(documentId: string) {
     const confirmar = confirm('¿Eliminar este cliente?');
@@ -357,6 +361,8 @@ export class DashboardEmpresaPage implements OnInit {
       console.error('Error al eliminar cliente:', err);
       alert('No fue posible eliminar el cliente');
     }
+
+    
   }
 
 

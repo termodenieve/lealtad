@@ -86,7 +86,7 @@ export class EditarVisitaPage implements OnInit {
       nombre: c.attributes?.nombre || c.nombre || "Sin nombre",
     }));
 
-    console.log("CLIENTES CARGADOS:", this.clientes);
+    console.log("clientes jijija:", this.clientes);
 
   } catch (error: any) {
     console.error("Error al cargar clientes:", error.response?.data || error);
