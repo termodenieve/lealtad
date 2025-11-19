@@ -70,7 +70,7 @@ export class LoginPage implements OnInit {
         }
       }
 
-      const meRes = await axios.get(this.url + '/users/me?populate[role]=*', {
+      const meRes = await axios.get(this.url + '/users/me?populate=*', {
 
 
         headers: { Authorization: `Bearer ${token}` },
@@ -80,7 +80,7 @@ export class LoginPage implements OnInit {
 
 
       if (!userWithRole.role) {
-        if (userWithRole.id === 3) {
+        if (userWithRole.role.id === 3) {
           userWithRole.role = { name: 'cliente', type: 'cliente', id: 1 };
         }
       }
@@ -101,7 +101,7 @@ export class LoginPage implements OnInit {
       } else if (role === 'empresa') {
         alert('Bienvenido empresa');
         this.router.navigateByUrl('/dashboard-empresa');
-      } else if (role === 'cliente') {
+      } else if (role === 'cliente' || role === 'authenticated') {
         alert('Bienvenido cliente');
         this.router.navigateByUrl('/dashboard-cliente');
         if (tokenFCM) {
